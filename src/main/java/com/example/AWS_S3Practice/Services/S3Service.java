@@ -1,8 +1,12 @@
 package com.example.AWS_S3Practice.Services;
 
+import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 public class S3Service {
@@ -15,4 +19,11 @@ public class S3Service {
 
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucketName;
+
+    public InputStream download(String key) throws IOException{
+        S3Resource s3Resource = s3Template.download(bucketName, key);
+        return s3Resource.getInputStream();
+    }
+
+
 }
