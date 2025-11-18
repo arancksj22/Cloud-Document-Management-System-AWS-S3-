@@ -24,7 +24,7 @@ public class S3Service {
     public String upload(MultipartFile file) throws IOException{
         String key = file.getOriginalFilename();
         s3Template.upload(bucketName, key, file.getInputStream());
-        return "Uploaded" + key;
+        return "Uploaded " + key;
     }
 
     public InputStream download(String key) throws IOException{
@@ -32,5 +32,8 @@ public class S3Service {
         return s3Resource.getInputStream();
     }
 
-
+    public String delete(String key){
+        s3Template.deleteObject(bucketName, key);
+        return "Deleted " + key;
+    }
 }
