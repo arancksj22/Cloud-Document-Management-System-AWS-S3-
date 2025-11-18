@@ -1,11 +1,12 @@
 package com.example.AWS_S3Practice.Controllers;
 
 import com.example.AWS_S3Practice.Services.S3Service;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,5 +24,13 @@ public class S3Controller {
     @PostMapping("/upload")
     public ResponseEntity<String> upload(@RequestParam("file")MultipartFile file) throws IOException {
         return ResponseEntity.ok(service.upload(file));
+    }
+
+    @GetMapping("/download/{fileName}")
+    public ResponseEntity<Resource> download(@PathVariable String fileName) throws IOException {
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .body(new InputStreamResource(service.download(fileName)));
     }
 }
