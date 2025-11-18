@@ -33,4 +33,9 @@ public class S3Controller {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
                 .body(new InputStreamResource(service.download(fileName)));
     }
+
+    @DeleteMapping("/delete/{fileName}")
+    public ResponseEntity<String> delete(@PathVariable String fileName) {
+        return ResponseEntity.ok(service.delete(fileName));
+    }
 }
