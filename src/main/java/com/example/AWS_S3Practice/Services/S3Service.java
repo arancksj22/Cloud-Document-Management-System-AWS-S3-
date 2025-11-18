@@ -4,6 +4,7 @@ import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +20,12 @@ public class S3Service {
 
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucketName;
+
+    public String upload(MultipartFile file) throws IOException{
+        String key = file.getOriginalFilename();
+        s3Template.upload(bucketName, key, file.getInputStream());
+        return "Uploaded" + key;
+    }
 
     public InputStream download(String key) throws IOException{
         S3Resource s3Resource = s3Template.download(bucketName, key);
